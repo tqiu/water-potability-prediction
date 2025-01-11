@@ -40,9 +40,9 @@ def save_data(data: pd.DataFrame, filepath: str) -> None:
 # test_data.to_csv(os.path.join(data_path, "test_data.csv"), index=False)
 
 def main():
-    data_filepath = "water_potability.csv"
     params_filepath = "params.yaml"
     raw_data_path = os.path.join("data", "raw")
+    data_filepath = "data/water_potability.csv"
 
     try:
         data = load_data(data_filepath)

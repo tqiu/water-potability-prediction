@@ -1,0 +1,81 @@
+schema: '2.0'
+stages:
+  data_collection:
+    cmd: python src/data/data_collection.py
+    deps:
+    - path: data/water_potability.csv
+      hash: md5
+      md5: a5eeae83d792e40da6c2f9e1eab945fc
+      size: 525187
+    - path: src/data/data_collection.py
+      hash: md5
+      md5: 19ebab760cefcc3f2e2d3e919cf9253c
+      size: 2191
+    params:
+      params.yaml:
+        data_collection.test_size: 0.3
+    outs:
+    - path: data/raw
+      hash: md5
+      md5: e08a230af5afa7076745536d0116f31b.dir
+      size: 522262
+      nfiles: 2
+  data_preprocessing:
+    cmd: python src/data/data_prep.py
+    deps:
+    - path: data/raw
+      hash: md5
+      md5: e08a230af5afa7076745536d0116f31b.dir
+      size: 522262
+      nfiles: 2
+    - path: src/data/data_prep.py
+      hash: md5
+      md5: 9e356ad593b81dfd9435f18da0073cdc
+      size: 2059
+    outs:
+    - path: data/processed
+      hash: md5
+      md5: 87a2d0e17843d43976e8f06ce9bf196f.dir
+      size: 546215
+      nfiles: 2
+  model_building:
+    cmd: python src/models/model_building.py
+    deps:
+    - path: data/processed
+      hash: md5
+      md5: 87a2d0e17843d43976e8f06ce9bf196f.dir
+      size: 546215
+      nfiles: 2
+    - path: src/models/model_building.py
+      hash: md5
+      md5: ca4fc709cf86a6704b4fe59e55103a03
+      size: 2402
+    params:
+      params.yaml:
+        model_building.n_estimators: 1000
+    outs:
+    - path: models/model.pkl
+      hash: md5
+      md5: a051875b5a346cc24ff32ab666c58d04
+      size: 64955039
+  model_evaluation:
+    cmd: python src/models/model_evaluation.py
+    deps:
+    - path: data/processed
+      hash: md5
+      md5: 87a2d0e17843d43976e8f06ce9bf196f.dir
+      size: 546215
+      nfiles: 2
+    - path: models/model.pkl
+      hash: md5
+      md5: a051875b5a346cc24ff32ab666c58d04
+      size: 64955039
+    - path: src/models/model_evaluation.py
+      hash: md5
+      md5: 21563cbb714a7805e59aef3e48a0440a
+      size: 2380
+    outs:
+    - path: reports/metrics.json
+      hash: md5
+      md5: 001b3fe32f6448848aa6f6bd8e90f12e
+      size: 77
